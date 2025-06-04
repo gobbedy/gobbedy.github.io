@@ -2,11 +2,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Meme Coin Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Meme Asset Report</title>
     
     <style>
         body { font-family: Arial, sans-serif; padding: 40px; background: #f7f7f7;}
         h1 { text-align: center; }
+        .table-container { overflow-x: auto; width: 100%; }
         table.main { margin-left: auto; margin-right: auto; width: 90%; border-collapse: collapse; background: #fff;}
         table.main th, table.main td { padding: 12px 8px; border-bottom: 1px solid #ddd; text-align: left; }
         table.main th { background-color: #4caf50; color: white; }
@@ -15,13 +17,20 @@
         table.subtable th, table.subtable td { padding: 6px 4px; border: 1px solid #ddd; }
         table.subtable th { background: #319d60; color: #fff; }
         a { color: #1565c0; text-decoration: underline; cursor: pointer;}
+        @media (max-width: 600px) {
+            body { padding: 4vw; }
+            table.main th, table.main td { padding: 8px 4px; font-size: 15px;}
+            table.subtable th, table.subtable td { font-size: 14px; }
+            h1 { font-size: 22px; }
+            table.main { width: 100%; }
+        }
     </style>
     
     
     <script>
     function togglePane(id) {
         var el = document.getElementById(id);
-        if (el.style.display === "none") {
+        if (el.style.display === "none" || el.style.display === "") {
             el.style.display = "table-row";
         } else {
             el.style.display = "none";
@@ -31,24 +40,27 @@
     
 </head>
 <body>
-    <h1>Likely Meme Coins from Reddit</h1>
-    <table class="main">
+    <h1>Likely Meme Coins & Stocks from Reddit</h1>
+    <div class="table-container">
+      <table class="main">
         <tr>
             <th>Name</th>
-            <th>Reason it's a meme coin</th>
+            <th>Reason it's a meme asset</th>
+            <th>Confidence</th>
             <th>Cumulative Score</th>
         </tr>
         
         <tr>
             <td>
-                <a href="javascript:void(0);" onclick="togglePane('pane_0')">pew</a>
+                <a href="javascript:void(0);" onclick="togglePane('pane_0')">CRWV</a>
             </td>
-            <td>Likely meme coin due to association with meme culture and gun sounds</td>
-            <td>689</td>
+            <td>Mentioned in a context suggesting speculative trading and significant profit, typical of meme stocks.</td>
+            <td>0.80</td>
+            <td>144</td>
         </tr>
         
         <tr id="pane_0" style="display:none;background:#f9f9f9;">
-            <td colspan="3">
+            <td colspan="4">
                 <table class="subtable">
                     <tr>
                         <th>Title</th>
@@ -56,36 +68,14 @@
                         <th>Score</th>
                         <th>Created (EST)</th>
                     </tr>
-                    <tr><td><a href="https://reddit.com/r/wallstreetbets/comments/1l1f7xd/clbr_full_port_1m_yolo/" target="_blank">CLBR- Full Port $1M YOLO</a></td><td>https://preview.redd.it/o0kyxcexxh4f1.png?width=1922&amp;format=png&amp;auto=webp&amp;s=39de2a12b18ac9c6438b31f3fae9680447391a2d
-
-**Disclaimer:**  I’m not a financial advisor and nothing I say should be considered investment advice, invest at your own risk.
-
-**Overview:** CLBR is a SPAC that is merging with Grab a Gun and will trade under the symbol PEW post merger.  Grab a Gun purports to be the “Amazon of guns” with one of the more unique online interfaces for gun purchases. Donald Trump Junior is on the board of the company, and CLBR’s CEO has close ties to the Trump administration.  The S-4 was filed in late March, with it expected to be cleared with the SEC shortly.  This would put a likely merger date in late June or early July (20 day notification period post S-4 clearing and a short voting period are required). 
-
-You can see an overview of the SPAC deal here:  [https://www.sec.gov/Archives/edgar/data/1995413/000121390025049587/ea024412501ex99-1\_colombier2.htm](https://www.sec.gov/Archives/edgar/data/1995413/000121390025049587/ea024412501ex99-1_colombier2.htm)
-
-The pro-forma enterprise valuation is $197.5M at $10/share.  This EV will vary based on the redemptions that occur from the SPAC sponsors prior to merger.  The current NAV floor is roughly $10.60/share (which is the lowest price it can go at the present, before any redemptions occur).  This NAV floor protection will be removed in the future as the merger proceeds, which removes your downside protection. 
-
-**Logic behind trade:**  This trade is long grift and long meme ability.  We live in the “golden age of grift” and are assuming that Trump Jr. and associates will pump the heck out of this thing.  Also, with the merger likely to take place around July 4^(th), the pro Second Amendment memes likely to circulate with the post-merger PEW ticker should be substantial (“pew pew pew” imitating the sound of a gun).  To be clear, I view this as a trade, not an investment, as the company fundamentals (\~$95M revenue and \~$5M EBITDA) likely only justify a valuation of $5-10 per share (using Smith and Wesson as a publicly traded comparable). 
-
-And to get the snide comments out of the way, yes DJT Jr. is a grifter and could be a drug user and is likely an unsavory character, but that doesn’t mean we can’t make money off of this trade. I’m here for the trade, not due to my political views.
-
-**Trade strategy:**  I see CLBR potentially going to $25-40 pre-merger, and if it reaches those levels pre-merger I will unwind the vast majority of my position.  I have 60K commons, 610 $10 July calls, and 4K warrants.  I chose the July calls because they were almost all intrinsic value, with only about $0.60/share of time value paid, and I wanted to have good odds that the merger will take place before those calls expire. I went full port on this so did not utilize out of the money options as those were too high risk for me. 
-
-Post merger, I expect a sharp dip at the open the first day it trades as PEW.  Look at the BULL chart, which went down to almost $9/share before ripping to $70+ over the next 1-2 days.  My expectation is a similar pattern, sharp dip at the open and then a face ripper over the next day or two, likely peaking in the after-market day 1 or pre-market day 2 in the $30+ range.  It could go insane and see $100+, but I’m not banking on that.  I will probably be very heavy commons in my post merger position as I expect this will peak in the pre market or after market so I can’t trade options then.  I will have a pretty tight stop loss on it (as there is no NAV floor protection post merger) and will wait to enter post merger until I see some evidence it has bottomed so I’m not catching a falling knife.
-
-So between my pre and post-merger planned trades, I’m hoping to go from $1M to $5-10M.  Will likely just call it a day if I reach $5M as that’s financial independence and no need to take much more risk.
-
-**Why do I think CLBR/PEW could go substantially higher than current levels:** The public float is very limited (about 17M shares) so the potential for sharp spikes as traders pile in could be substantial, like we saw with other recent SPAC&#x27;s or IPO&#x27;s.  Grab a Gun does have revenues and is actually cash flow positive, so it does have a justified valuation above $0 (unlike many stocks/cryptos that have ripped to atmospheric levels with no intrinsic value).  The entire market is a casino and the days of efficient market hypothesis are long over.  There is a dedicated pro second amendment community that will likely latch onto this as a chance to “stick it to the man” as well.   There is also a chance that a tweet by President Trump (technically illegal but that probably won’t stop him from doing so, haha) or Elon Musk (another big second amendment fan) could send this to truly stratospheric levels.  Further analysis on the “meme potential” can be found here:  [https://myark.substack.com/p/colombier-acquisition-corp-clbr-grab](https://myark.substack.com/p/colombier-acquisition-corp-clbr-grab)
-
-**Pre-empting the “he posted a fake screenshot” argument:**  My portfolio is linked through on the AfterHour app, you can pull up the CLBR room and see that I am the top holder there under the “CLBR to Pew” username.
-
-**What I’m looking at post-CLBR trade:**  I am bearish on the overall market as I think the tariff impacts will lead to a recession that hasn’t been priced in, and even pre tariffs the valuation multiples the S&amp;P is trading at are insanely high given where interest rates are.  So, between that, and hopefully being financially independent post-trade, I’m going to limit risk and be mostly in money markets until the Fed lowers rates substantially.  But, I’m a gambler, so will probably have 10% in a speculative portfolio for future plays like this, along with other SPAC’s trading near NAV along with a few non SPAC plays, primarily in the space and humanoid robot industries.</td><td>689</td><td>2025-06-02 07:08:00 EDT</td></tr>
+                    <tr><td><a href="https://reddit.com/r/wallstreetbets/comments/1l2dqd5/yolod_22_crwv_calls_today_refreshed_the_wsb_rules/" target="_blank">YOLO’d 22 CRWV calls today, refreshed the WSB rules too  double win!</a></td><td>Market’s heating up, apes — send it but don’t forget the rules.  
+Treat yourself to an iced Americano tonight, and may your accounts stay gloriously green! </td><td>46</td><td>2025-06-03 10:43:52 EDT</td></tr><tr><td><a href="https://reddit.com/r/wallstreetbets/comments/1l2do8f/just_hit_a_sweet_30k_profit_on_crwv/" target="_blank">Just hit a sweet $30K profit on CRWV! 🚀🔥</a></td><td>Man, gotta say, this one was a rollercoaster. Took a bit of patience and some solid timing, but holding through the ups and downs really paid off.</td><td>98</td><td>2025-06-03 10:41:24 EDT</td></tr>
                 </table>
             </td>
         </tr>
         
         
-    </table>
+      </table>
+    </div>
 </body>
 </html>
