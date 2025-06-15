@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Meme coin Report</title>
-    <script src="https://cdn.jsdelivr.net/npm/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
+    <script src="libs/ag-grid-enterprise.min.js"></script>
     <style>
     .ag-center-cols-viewport {
         min-height: unset !important;
@@ -14,8 +14,6 @@
     <h1>Likely Meme Coins from Reddit</h1>
     <div id="mainGrid" style="height: 100%"></div>
     <script>
-        agGrid.LicenseManager.setLicenseKey("[TRIAL]_this_{AG_Charts_and_AG_Grid}_Enterprise_key_{AG-087313}_is_granted_for_evaluation_only___Use_in_production_is_not_permitted___Please_report_misuse_to_legal@ag-grid.com___For_help_with_purchasing_a_production_key_please_contact_info@ag-grid.com___You_are_granted_a_{Single_Application}_Developer_License_for_one_application_only___All_Front-End_JavaScript_developers_working_on_the_application_would_need_to_be_licensed___This_key_will_deactivate_on_{30 June 2025}____[v3]_[0102]_MTc1MTIzODAwMDAwMA==bab99475ed6430aef766ca806f8a0647");
-
         var mainColumnDefs = [{"headerName": "Name", "field": "name", "cellRenderer": "agGroupCellRenderer"}, {"headerName": "Reason", "field": "reason", "flex": 6, "tooltipField": "reason"}, {"headerName": "Confidence", "field": "confidence"}, {"headerName": "Cumulative Score", "field": "score", "flex": 1.5, "sort": "desc"}];
         var subColumnDefs = [{"headerName": "Title", "field": "title", "flex": 6, "tooltipField": "title", "cellRenderer": "agGroupCellRenderer"}, {"headerName": "Score", "field": "score"}, {"headerName": "Comments", "field": "num_comments"}, {"headerName": "Created", "field": "created"}];
         var postSubColumnDefs = [{"headerName": "PostText", "field": "text", "wrapText": true, "autoHeight": true, "flex": 1}];
