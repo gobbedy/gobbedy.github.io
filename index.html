@@ -2,462 +2,71 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Meme coin Report</title>
-    
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 40px; background: #f7f7f7;}
-        h1 { text-align: center; }
-        .table-container { overflow-x: auto; width: 100%; }
-        table.main { margin-left: auto; margin-right: auto; width: 90%; border-collapse: collapse; background: #fff;}
-        table.main th, table.main td { padding: 12px 8px; border-bottom: 1px solid #ddd; text-align: left; }
-        table.main th { background-color: #4caf50; color: white; cursor: pointer; }
-        table.main tr:nth-child(even) { background-color: #f2f2f2; }
-        table.subtable { width: 100%; border: 1px solid #ddd; background: #fafafa; margin: 6px 0;}
-        table.subtable th, table.subtable td { padding: 6px 4px; border: 1px solid #ddd; }
-        table.subtable th { background: #319d60; color: #fff; cursor: pointer; }
-        a { color: #1565c0; text-decoration: underline; cursor: pointer;}
-        .single-line {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-            max-width: 400px;
-            cursor: pointer;
-            overflow-wrap: break-word;
-            word-break: break-all;
-        }
-        .full-text {
-            white-space: pre-line;
-            display: block;
-            max-width: 400px;
-            cursor: pointer;
-            background: #f7f7f7;
-            border-radius: 3px;
-            padding: 2px 4px;
-            overflow-wrap: break-word;
-            word-break: break-all;
-        }
-        @media (max-width: 600px) {
-            body { padding: 4vw; }
-            table.main th, table.main td { padding: 8px 4px; font-size: 15px;}
-            table.subtable th, table.subtable td { font-size: 14px; }
-            h1 { font-size: 22px; }
-            table.main { width: 100%; }
-            .single-line, .full-text { max-width: 160px; }
-        }
+    .ag-center-cols-viewport {
+        min-height: unset !important;
+    }
     </style>
-    
-    
-    <script>
-    function sortMainTable(n, type) {
-        var table = document.querySelector("table.main");
-        var allRows = Array.from(table.rows).slice(1); // skip header
-        var pairs = [];
-        for (var i = 0; i < allRows.length; i++) {
-            var mainRow = allRows[i];
-            var subRow = null;
-            if (i + 1 < allRows.length && allRows[i + 1].querySelector && allRows[i + 1].querySelector("table.subtable")) {
-                subRow = allRows[i + 1];
-                i++;
-            }
-            pairs.push([mainRow, subRow]);
-        }
-        var asc = table.getAttribute("data-sort-col") != n || table.getAttribute("data-sort-dir") == "desc";
-        pairs.sort(function(a, b) {
-            var x = a[0].cells[n].innerText || a[0].cells[n].textContent;
-            var y = b[0].cells[n].innerText || b[0].cells[n].textContent;
-            if(type === "num") {
-                x = parseFloat(x.replace(/[^0-9.-]+/g,"")) || 0;
-                y = parseFloat(y.replace(/[^0-9.-]+/g,"")) || 0;
-            } else if(type === "str") {
-                x = x.toLowerCase();
-                y = y.toLowerCase();
-            }
-            if(x < y) return asc ? -1 : 1;
-            if(x > y) return asc ? 1 : -1;
-            return 0;
-        });
-        while (table.rows.length > 1) {
-            table.deleteRow(1);
-        }
-        for (var i = 0; i < pairs.length; i++) {
-            table.tBodies[0].appendChild(pairs[i][0]);
-            if (pairs[i][1]) table.tBodies[0].appendChild(pairs[i][1]);
-        }
-        table.setAttribute("data-sort-col", n);
-        table.setAttribute("data-sort-dir", asc ? "asc" : "desc");
-    }
-
-    function sortSubTable(id, n, type) {
-        var table = document.getElementById(id).querySelector("table.subtable");
-        var rows = Array.from(table.rows).slice(1); // skip header
-        var asc = table.getAttribute("data-sort-col") != n || table.getAttribute("data-sort-dir") == "desc";
-        rows.sort(function(a, b) {
-            var x, y;
-            if(type === "date") {
-                var xSpan = a.cells[n].querySelector('span[data-timestamp]');
-                var ySpan = b.cells[n].querySelector('span[data-timestamp]');
-                x = xSpan ? parseInt(xSpan.getAttribute('data-timestamp')) : 0;
-                y = ySpan ? parseInt(ySpan.getAttribute('data-timestamp')) : 0;
-            } else if(type === "num") {
-                x = parseFloat(a.cells[n].innerText.replace(/[^0-9.-]+/g,"")) || 0;
-                y = parseFloat(b.cells[n].innerText.replace(/[^0-9.-]+/g,"")) || 0;
-            } else if(type === "str") {
-                x = a.cells[n].innerText.toLowerCase();
-                y = b.cells[n].innerText.toLowerCase();
-            }
-            if(x < y) return asc ? -1 : 1;
-            if(x > y) return asc ? 1 : -1;
-            return 0;
-        });
-        for(var i=0; i<rows.length; i++) table.tBodies[0].appendChild(rows[i]);
-        table.setAttribute("data-sort-col", n);
-        table.setAttribute("data-sort-dir", asc ? "asc" : "desc");
-    }
-
-    function togglePane(id) {
-        var el = document.getElementById(id);
-        if (el.style.display === "none" || el.style.display === "") {
-            el.style.display = "table-row";
-        } else {
-            el.style.display = "none";
-        }
-    }
-
-    function toggleText(id) {
-        var shortEl = document.getElementById(id + "_short");
-        var fullEl = document.getElementById(id + "_full");
-        if (shortEl.style.display === "none") {
-            shortEl.style.display = "";
-            fullEl.style.display = "none";
-        } else {
-            shortEl.style.display = "none";
-            fullEl.style.display = "";
-        }
-    }
-    // Show [more] link only if text overflows
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll('.single-line').forEach(function(el) {
-            if (el.scrollWidth > el.clientWidth) {
-                var more = el.querySelector('a[id$="_more"]');
-                if (more) more.style.display = "";
-            }
-        });
-    });
-    </script>
-    
 </head>
 <body>
     <h1>Likely Meme Coins from Reddit</h1>
-    <div class="table-container">
-      <table class="main" data-sort-col="" data-sort-dir="">
-        <tr>
-            <th onclick="sortMainTable(0, 'str')">Name &#x25B2;&#x25BC;</th>
-            <th>Reason it's a meme coin</th>
-            <th onclick="sortMainTable(2, 'num')">Confidence &#x25B2;&#x25BC;</th>
-            <th onclick="sortMainTable(3, 'num')">Cumulative Score &#x25B2;&#x25BC;</th>
-        </tr>
-        
-        <tr>
-            <td>
-                <a href="javascript:void(0);" onclick="togglePane('pane_0')">DOGE</a>
-            </td>
-            <td>Dogecoin is a widely known meme coin originally started as a joke and often referenced with internet dog memes.</td>
-            <td>1.00</td>
-            <td>496</td>
-        </tr>
-        
-        <tr id="pane_0" style="display:none;background:#f9f9f9;">
-            <td colspan="5">
-                <table class="subtable" data-sort-col="" data-sort-dir="">
-                    <tr>
-                        <th>Title</th>
-                        <th>Text</th>
-                        <th onclick="sortSubTable('pane_0',2,'num')">Score &#x25B2;&#x25BC;</th>
-                        <th onclick="sortSubTable('pane_0',3,'num')">Num Comments &#x25B2;&#x25BC;</th>
-                        <th onclick="sortSubTable('pane_0',4,'date')">Created (EST) &#x25B2;&#x25BC;</th>
-                    </tr>
-                    <tr><td><a href="https://reddit.com/r/dogecoin/comments/1l6it7s/be_patient_people_i_think_we_will_see_a_move_once/" target="_blank">Be patient people I think we will see a move once interest rates are cut. Whenever that is.</a></td><td><span style="color:#888;font-style:italic;">No text provided</span></td><td>40</td><td>14</td><td><span data-timestamp="1749406390">Jun 8, 2:13:10 PM</span></td></tr><tr><td><a href="https://reddit.com/r/dogecoin/comments/1l646ea/in_due_time/" target="_blank">In due time</a></td><td><span style="color:#888;font-style:italic;">No text provided</span></td><td>61</td><td>7</td><td><span data-timestamp="1749358887">Jun 8, 1:01:27 AM</span></td></tr><tr><td><a href="https://reddit.com/r/dogecoin/comments/1l5vecv/dogecoin_moving_within_narrow_band_with_no_choice/" target="_blank">Dogecoin moving within narrow band with no choice but to decide one way or another</a></td><td><span style="color:#888;font-style:italic;">No text provided</span></td><td>47</td><td>34</td><td><span data-timestamp="1749330865">Jun 7, 5:14:25 PM</span></td></tr><tr><td><a href="https://reddit.com/r/dogecoin/comments/1l5t240/logarithmic_uptrend/" target="_blank">Logarithmic Uptrend.</a></td><td><span id="text_0_4143434344510308674_short" class="single-line">https://x.com/Bitcoinsensus/status/1931380256830607730?s=19 <a href="javascript:void(0);" id="text_0_4143434344510308674_more" style="display:none;" onclick="toggleText('text_0_4143434344510308674')">[more]</a></span><span id="text_0_4143434344510308674_full" class="full-text" style="display:none;">https://x.com/Bitcoinsensus/status/1931380256830607730?s=19 <a href="javascript:void(0);" onclick="toggleText('text_0_4143434344510308674')">[less]</a></span></td><td>70</td><td>26</td><td><span data-timestamp="1749324547">Jun 7, 3:29:07 PM</span></td></tr><tr><td><a href="https://reddit.com/r/dogecoin/comments/1l5rw6t/zoom_out/" target="_blank">Zoom. Out.</a></td><td><span id="text_0_989068888356937709_short" class="single-line">https://x.com/TATrader_Alan/status/1931313202308292990?s=19 <a href="javascript:void(0);" id="text_0_989068888356937709_more" style="display:none;" onclick="toggleText('text_0_989068888356937709')">[more]</a></span><span id="text_0_989068888356937709_full" class="full-text" style="display:none;">https://x.com/TATrader_Alan/status/1931313202308292990?s=19 <a href="javascript:void(0);" onclick="toggleText('text_0_989068888356937709')">[less]</a></span></td><td>160</td><td>22</td><td><span data-timestamp="1749321459">Jun 7, 2:37:39 PM</span></td></tr><tr><td><a href="https://reddit.com/r/dogecoin/comments/1l5lxjy/1_month_restest_complete/" target="_blank">1 month restest complete.</a></td><td><span id="text_0_6691636493965698900_short" class="single-line">Now, let&#x27;s cut the cheese at .19 and get above that neckline at .25 <a href="javascript:void(0);" id="text_0_6691636493965698900_more" style="display:none;" onclick="toggleText('text_0_6691636493965698900')">[more]</a></span><span id="text_0_6691636493965698900_full" class="full-text" style="display:none;">Now, let&#x27;s cut the cheese at .19 and get above that neckline at .25 <a href="javascript:void(0);" onclick="toggleText('text_0_6691636493965698900')">[less]</a></span></td><td>49</td><td>13</td><td><span data-timestamp="1749306002">Jun 7, 10:20:02 AM</span></td></tr><tr><td><a href="https://reddit.com/r/dogecoin/comments/1l5khoj/how_i_tell_my_wife_we_bought_more_doge/" target="_blank">How I tell my wife we bought more doge</a></td><td><span style="color:#888;font-style:italic;">No text provided</span></td><td>69</td><td>8</td><td><span data-timestamp="1749301841">Jun 7, 9:10:41 AM</span></td></tr>
-                </table>
-            </td>
-        </tr>
-        
-        
-        <tr>
-            <td>
-                <a href="javascript:void(0);" onclick="togglePane('pane_1')">KENDU</a>
-            </td>
-            <td>Kendu is described as a Brandcoin with a strong community and meme-like marketing, indicating traits of a meme coin.</td>
-            <td>0.80</td>
-            <td>73</td>
-        </tr>
-        
-        <tr id="pane_1" style="display:none;background:#f9f9f9;">
-            <td colspan="5">
-                <table class="subtable" data-sort-col="" data-sort-dir="">
-                    <tr>
-                        <th>Title</th>
-                        <th>Text</th>
-                        <th onclick="sortSubTable('pane_1',2,'num')">Score &#x25B2;&#x25BC;</th>
-                        <th onclick="sortSubTable('pane_1',3,'num')">Num Comments &#x25B2;&#x25BC;</th>
-                        <th onclick="sortSubTable('pane_1',4,'date')">Created (EST) &#x25B2;&#x25BC;</th>
-                    </tr>
-                    <tr><td><a href="https://reddit.com/r/altcoin/comments/1l5kfnl/the_case_for_kendu_info_journal_6_v2/" target="_blank">The Case for $Kendu: Info Journal #6 v2</a></td><td><span id="text_1_5290872587906397370_short" class="single-line">**This is not my post: All credit to TheGDC:** [**https://x.com/TheGDC33**](https://x.com/TheGDC33)  
-  
-Here is the sixth installment of the Kendu Info Journal Series v2. KENDU is a  Brandcoin propelled by the strongest community in DeFi. “The Kendu community is filled with talent, passion, and conviction. It is a community that is running it up old school, 2021-style. We are a sentient, autonomous, ever-expanding marketing machine that will not rest.
-
-Join the movement! How will you use your unique set of skills and networks to build the biggest brand and legacy in #web3?” (Kojak797 OG Loyalist and one of the prominent voices welcoming me to Kendu and talking in a VC in my early days)
-
-Here and now, I believe Kendu is in a spectacular position in the market. I have been putting together these articles, which are a collection of the growing engagement and conversions of various CT crypto enthusiasts, with both massive to smaller followings, as a way to showcase the success of our organic approach. Please be advised that people are noticing, and growth will continue. As we continue to move up in MC and grow, more and more people will activate, be they new members, those reactivating, or those coming back and getting a bag again.
-
-Point #3: EXPOSURE HELPS ORGANIC projects reach **critical mass**. With a low market cap, IRL growth and Social mentions spiking exponentially, holder count going up, creators posting with us up, and output rivaling communities with much larger MCs, Kendu is building towards greatness!
-
-This brings me to my point: $KENDU will continue to keep growing organically, where holders will keep going up as the output of the Chads and Chadettes keeps increasing. **It is time to stop flipping for pennies when you can work towards the chance for generational wealth**. 
-
-https://preview.redd.it/ox6981667i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=80d7d7b6c25cdf516fa54be3b6df1013539bd2b4
-
-$Kendu is getting increasingly noticed, and this series aims to prove our conversion powers. Altsteinn has eighty-three thousand followers and has been posting about Kendu since 2024, but combing through the profile, anyone can see an exponential increase in the shoutouts featuring us. Topics range from positivity about our whales DCAing to us being the goat, to the above post recognizing our brand and cult like nature. Anyone can label themselves anything, but living your brand is what matters: actions speak louder than words. 
-
-It can start with a simple post, but when you see the movement spreading, pay attention! I start collecting posts the second I publish the previous article. While ordering this article, I noticed something IMPORTANT:
-
-https://preview.redd.it/7aovcmg77i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=204d8353723661d345d2a24c12287859979c0413
-
-https://preview.redd.it/bmb7eoz77i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=d4fec57baebe78381a6f8692580542d0eb9e9155
-
-rekt\_cooked quoted one of  altsteinn ‘s previous posts. Bullish
-
-Then primeblue99 quotes one of rekt\_cooked’s previous posts
-
-https://preview.redd.it/amxoprf97i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=19c9566a7178e110bdf69674a4e69bf40db34a72
-
-And then it continues here with moriarty\_winn quoting the previous shoutout below:
-
-https://preview.redd.it/vsspfdka7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=0319edcae0ea1929f3b66ae81574ba1a8fc51070
-
-The content of the posts should be studied! Remember, in Kendu, there are no paid KOLs with supply. Don’t panic, it is all organic!
-
-Kojak797 already told readers, Kendu is running it up old school 2021 style, and it is working.
-
-https://preview.redd.it/i8bzqr3d7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=ec22905df847f6f18f1fd11aa362c6eaac9570fd
-
-Tokens can’t fake organic. Tokens can’t fake real. Tokens can’t fake having a movement. People are taking noticing and watching us like Anon\_1000X. Kendu is as real as it comes, and we are spreading our Brandoin everywhere!
-
-So, what do people find appealing about Kendu? Maybe it is the Ken-Du attitude:
-
-https://preview.redd.it/i4rp2d0e7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=027e7d4ca1397323662c8bef28062958d37b5860
-
-As cryptomalli asserts in the energy that Kendu brings, all humans could use such an approach in their lives.
-
-Maybe people like us because of the drive to win. Nothing can stop what we are building, and we won’t be stopped. We may not win every poll, but it is the expectation in our community that we should. With cryptonownever, Kendu showed up to Caden’s poll, and we won:
-
-https://preview.redd.it/h8hd653f7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=14bdf2be6e8716dcc50b5d594a0c177d6371362c
-
-From that win, it resulted in a video was made about Kendu. Don’t take my word for it, watch Caden yourself. His 12.8K subscribers on YouTube must be nothing.
-
-[KENDU: SLEEPING GIANT?!?!](https://www.youtube.com/watch?v=pxWrEOPbtWY)
-
-https://preview.redd.it/px067ieg7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=a12e5def8d2a5aa68b7df35685fd8c01e466ec67
-
-5iveall sent out the above post about Kendu. Only in the second post, and they already know what we are about. More posts have followed because once you get it, Kendu is part of you. Welcome and keep that helmet on!
-
-https://preview.redd.it/yily5tjh7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=d16334ac5fea567055b310e99dde819615e166d0
-
-Rieki\_sol posted about us on Memorial Day weekend when things were slower, and we still showed up in the comments and raided. As a newer convert, they are already utilizing our catalogue of memes and content. I wanted to say welcome, and we hope you come into the TG where the main magic happens (if you aren’t already in it).
-
-The next two posts track top communities by vote on their respective sites.
-
-https://preview.redd.it/gelwo7wi7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=b2b7ee0d39a5ddd1d45077a86c3248795b908662
-
-[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-qnuy3asij35f1.png?width=802&amp;format=png&amp;auto=webp&amp;s=3bc18e369f0bba54229d8681fc58633c3d11967c)capitoday has 1.6K followers and a nice website where people must log in to vote. Full disclosure, I have not used this site, but some of our Chads and Chaddettes are, and it is keeping us in the top five
-
-https://preview.redd.it/dwxlwqak7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=d629edf4679a4cbb632d6540b60000fbf12fe9ff
-
-CryptoSmallcap has 11.2K followers and is labeled as a Media and News Company. They have been posting about Kendu for months now, where we regularly land in their top ten. The profile does contain some posts that get at the heart and soul of Kendu, so worth checking out.
-
-https://preview.redd.it/9v51zlam7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=df5fbb9936e66a51daeedee841b2f8af1c046022
-
-Time to get into some numbers. Gem\_Sheriff has a price expectation of 1 billion MC, but four days later, our old friend put a “Bull run target” of 5 billion MC. If you look at Gem’s profile, you can see that Kendu posts have been happening since the summer of ‘24. According to many, that is a low target for this cycle, but I agree that billions should be the easy minimum for Kendu to reach. Only work will get us there, and only time will tell. 
-
-Why such conviction and belief? What do some say about Kendu?
-
-https://preview.redd.it/oucha6hn7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=2489a486c2613e98f8d05235e2792c4316f9f49a
-
-[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-zob75wenj35f1.png?width=802&amp;format=png&amp;auto=webp&amp;s=5127892efbfb3414d11b6f804c66d63aeff92a42)According to pepeisfriend, it is the power of the community that this personality believes has set Kendu up to be next, just like Pepe did. pepeisfriend has one hundred and twenty thousand followers, and this was the first post from this account, but it isn’t the only one. I would encourage readers to check the profile themselves and decide if Kendu has fully converted another CT personality.
-
-https://preview.redd.it/op2ifd2p7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=40d49f69c9d391a88ef2d4d46706daefee3e5a8c
-
-While this is an older post, the chart is applicable and from my new favorite source: Guardian1771\_. I have no idea when we will reach the next fib or when ETH will pump or BTC will make a new high or any of that, BUT I know all of the above will happen. As always, Kendu keeps working to grow the brand.
-
-[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-x636oomqj35f1.png?width=802&amp;format=png&amp;auto=webp&amp;s=f22f9f6f71d026adac55da20703a31ca41a25c3f)
-
-https://preview.redd.it/5xu3ehfq7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=a9842764fb0204389de8e2cba227df60cc1dbe3b
-
-I just have to leave the above reply to my reply to cryptojourneyrs&#x27; post about ETH. He has one hundred and thirty-two thousand followers and is a well-known and respected crypto personality who is aware of Kendu.
-
-If you are looking for more information about Kend as you research, here is a Space from a massive account Officialtravlad: 
-
-https://preview.redd.it/9t2h9omr7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=54dff13a7f62e5ee4a7ccec29f45b7aefc093ae7
-
-At the time of writing, the post had 22.9 thousand views and 15.5 thousand listens. Additionally, Kendu is hosting a community space of our own at 5 pm EST today. (you can find it on X, 6/4/25)
-
-Tune in or have a listen to learn more about Kendu.
-
-https://preview.redd.it/jrlz7jqs7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=41da3c36febf811f5e0755e1b1c13ae04a20188b
-
-Saving one of my favorites for last, Kenduraver is an OG loyalist in Kendu who has been around since the start. He took it upon himself to start the Kendu merch store around 5 million MC, and he co-founded KenduEnergy, our first true brandcoin product. This is the type of legend that works in Kendu, and he is one of the many reasons we are truly one of a kind!
-
-No one can keep up with the output in Kendu as the work towards multi-billions is never-ending. And we are growing in important ways still. One such way is that the converts highlighted in previous articles are still posting about Kendu. That is what conversion is, they are now bull posting about Kendu since they got the vision. Now imagine what happens when some of those converts use the Kendu brand to build something on chain or off chain!
-
-People who understand how markets work and what it takes for an organic project to be sustainable are shouting us out more and more and supporting Kendu with investment, both financially and with their time. These are people who understand what a movement is and are experienced traders.
-
-Volume, holder count, and shoutouts will continue to rise, and MC will continue to stair-step up (it isn’t a straight line)! This is your invite to come, take a look, and see what is going on in Kendu because: We don’t gamble. We Work!
-
-Sincerely,
-
-TheGDC33
-
-The Metrics Master
-
-ETH: 0xaa95f26e30001251fb905d264Aa7b00eE9dF6C18
-
-SOL: 2nnrviYJRLcf2bXAxpKTRXzccoDbwaP4vzuGUG75Jo45
-
-BASE: 0xef73611F98DA6E57e0776317957af61B59E09Ed7
-
-CG: [https://www.coingecko.com/en/coins/kendu-inu](https://www.coingecko.com/en/coins/kendu-inu)
-
-CMC: [https://coinmarketcap.com/currencies/kendu-inu/](https://coinmarketcap.com/currencies/kendu-inu/) <a href="javascript:void(0);" id="text_1_5290872587906397370_more" style="display:none;" onclick="toggleText('text_1_5290872587906397370')">[more]</a></span><span id="text_1_5290872587906397370_full" class="full-text" style="display:none;">**This is not my post: All credit to TheGDC:** [**https://x.com/TheGDC33**](https://x.com/TheGDC33)  
-  
-Here is the sixth installment of the Kendu Info Journal Series v2. KENDU is a  Brandcoin propelled by the strongest community in DeFi. “The Kendu community is filled with talent, passion, and conviction. It is a community that is running it up old school, 2021-style. We are a sentient, autonomous, ever-expanding marketing machine that will not rest.
-
-Join the movement! How will you use your unique set of skills and networks to build the biggest brand and legacy in #web3?” (Kojak797 OG Loyalist and one of the prominent voices welcoming me to Kendu and talking in a VC in my early days)
-
-Here and now, I believe Kendu is in a spectacular position in the market. I have been putting together these articles, which are a collection of the growing engagement and conversions of various CT crypto enthusiasts, with both massive to smaller followings, as a way to showcase the success of our organic approach. Please be advised that people are noticing, and growth will continue. As we continue to move up in MC and grow, more and more people will activate, be they new members, those reactivating, or those coming back and getting a bag again.
-
-Point #3: EXPOSURE HELPS ORGANIC projects reach **critical mass**. With a low market cap, IRL growth and Social mentions spiking exponentially, holder count going up, creators posting with us up, and output rivaling communities with much larger MCs, Kendu is building towards greatness!
-
-This brings me to my point: $KENDU will continue to keep growing organically, where holders will keep going up as the output of the Chads and Chadettes keeps increasing. **It is time to stop flipping for pennies when you can work towards the chance for generational wealth**. 
-
-https://preview.redd.it/ox6981667i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=80d7d7b6c25cdf516fa54be3b6df1013539bd2b4
-
-$Kendu is getting increasingly noticed, and this series aims to prove our conversion powers. Altsteinn has eighty-three thousand followers and has been posting about Kendu since 2024, but combing through the profile, anyone can see an exponential increase in the shoutouts featuring us. Topics range from positivity about our whales DCAing to us being the goat, to the above post recognizing our brand and cult like nature. Anyone can label themselves anything, but living your brand is what matters: actions speak louder than words. 
-
-It can start with a simple post, but when you see the movement spreading, pay attention! I start collecting posts the second I publish the previous article. While ordering this article, I noticed something IMPORTANT:
-
-https://preview.redd.it/7aovcmg77i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=204d8353723661d345d2a24c12287859979c0413
-
-https://preview.redd.it/bmb7eoz77i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=d4fec57baebe78381a6f8692580542d0eb9e9155
-
-rekt\_cooked quoted one of  altsteinn ‘s previous posts. Bullish
-
-Then primeblue99 quotes one of rekt\_cooked’s previous posts
-
-https://preview.redd.it/amxoprf97i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=19c9566a7178e110bdf69674a4e69bf40db34a72
-
-And then it continues here with moriarty\_winn quoting the previous shoutout below:
-
-https://preview.redd.it/vsspfdka7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=0319edcae0ea1929f3b66ae81574ba1a8fc51070
-
-The content of the posts should be studied! Remember, in Kendu, there are no paid KOLs with supply. Don’t panic, it is all organic!
-
-Kojak797 already told readers, Kendu is running it up old school 2021 style, and it is working.
-
-https://preview.redd.it/i8bzqr3d7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=ec22905df847f6f18f1fd11aa362c6eaac9570fd
-
-Tokens can’t fake organic. Tokens can’t fake real. Tokens can’t fake having a movement. People are taking noticing and watching us like Anon\_1000X. Kendu is as real as it comes, and we are spreading our Brandoin everywhere!
-
-So, what do people find appealing about Kendu? Maybe it is the Ken-Du attitude:
-
-https://preview.redd.it/i4rp2d0e7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=027e7d4ca1397323662c8bef28062958d37b5860
-
-As cryptomalli asserts in the energy that Kendu brings, all humans could use such an approach in their lives.
-
-Maybe people like us because of the drive to win. Nothing can stop what we are building, and we won’t be stopped. We may not win every poll, but it is the expectation in our community that we should. With cryptonownever, Kendu showed up to Caden’s poll, and we won:
-
-https://preview.redd.it/h8hd653f7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=14bdf2be6e8716dcc50b5d594a0c177d6371362c
-
-From that win, it resulted in a video was made about Kendu. Don’t take my word for it, watch Caden yourself. His 12.8K subscribers on YouTube must be nothing.
-
-[KENDU: SLEEPING GIANT?!?!](https://www.youtube.com/watch?v=pxWrEOPbtWY)
-
-https://preview.redd.it/px067ieg7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=a12e5def8d2a5aa68b7df35685fd8c01e466ec67
-
-5iveall sent out the above post about Kendu. Only in the second post, and they already know what we are about. More posts have followed because once you get it, Kendu is part of you. Welcome and keep that helmet on!
-
-https://preview.redd.it/yily5tjh7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=d16334ac5fea567055b310e99dde819615e166d0
-
-Rieki\_sol posted about us on Memorial Day weekend when things were slower, and we still showed up in the comments and raided. As a newer convert, they are already utilizing our catalogue of memes and content. I wanted to say welcome, and we hope you come into the TG where the main magic happens (if you aren’t already in it).
-
-The next two posts track top communities by vote on their respective sites.
-
-https://preview.redd.it/gelwo7wi7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=b2b7ee0d39a5ddd1d45077a86c3248795b908662
-
-[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-qnuy3asij35f1.png?width=802&amp;format=png&amp;auto=webp&amp;s=3bc18e369f0bba54229d8681fc58633c3d11967c)capitoday has 1.6K followers and a nice website where people must log in to vote. Full disclosure, I have not used this site, but some of our Chads and Chaddettes are, and it is keeping us in the top five
-
-https://preview.redd.it/dwxlwqak7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=d629edf4679a4cbb632d6540b60000fbf12fe9ff
-
-CryptoSmallcap has 11.2K followers and is labeled as a Media and News Company. They have been posting about Kendu for months now, where we regularly land in their top ten. The profile does contain some posts that get at the heart and soul of Kendu, so worth checking out.
-
-https://preview.redd.it/9v51zlam7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=df5fbb9936e66a51daeedee841b2f8af1c046022
-
-Time to get into some numbers. Gem\_Sheriff has a price expectation of 1 billion MC, but four days later, our old friend put a “Bull run target” of 5 billion MC. If you look at Gem’s profile, you can see that Kendu posts have been happening since the summer of ‘24. According to many, that is a low target for this cycle, but I agree that billions should be the easy minimum for Kendu to reach. Only work will get us there, and only time will tell. 
-
-Why such conviction and belief? What do some say about Kendu?
-
-https://preview.redd.it/oucha6hn7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=2489a486c2613e98f8d05235e2792c4316f9f49a
-
-[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-zob75wenj35f1.png?width=802&amp;format=png&amp;auto=webp&amp;s=5127892efbfb3414d11b6f804c66d63aeff92a42)According to pepeisfriend, it is the power of the community that this personality believes has set Kendu up to be next, just like Pepe did. pepeisfriend has one hundred and twenty thousand followers, and this was the first post from this account, but it isn’t the only one. I would encourage readers to check the profile themselves and decide if Kendu has fully converted another CT personality.
-
-https://preview.redd.it/op2ifd2p7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=40d49f69c9d391a88ef2d4d46706daefee3e5a8c
-
-While this is an older post, the chart is applicable and from my new favorite source: Guardian1771\_. I have no idea when we will reach the next fib or when ETH will pump or BTC will make a new high or any of that, BUT I know all of the above will happen. As always, Kendu keeps working to grow the brand.
-
-[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-x636oomqj35f1.png?width=802&amp;format=png&amp;auto=webp&amp;s=f22f9f6f71d026adac55da20703a31ca41a25c3f)
-
-https://preview.redd.it/5xu3ehfq7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=a9842764fb0204389de8e2cba227df60cc1dbe3b
-
-I just have to leave the above reply to my reply to cryptojourneyrs&#x27; post about ETH. He has one hundred and thirty-two thousand followers and is a well-known and respected crypto personality who is aware of Kendu.
-
-If you are looking for more information about Kend as you research, here is a Space from a massive account Officialtravlad: 
-
-https://preview.redd.it/9t2h9omr7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=54dff13a7f62e5ee4a7ccec29f45b7aefc093ae7
-
-At the time of writing, the post had 22.9 thousand views and 15.5 thousand listens. Additionally, Kendu is hosting a community space of our own at 5 pm EST today. (you can find it on X, 6/4/25)
-
-Tune in or have a listen to learn more about Kendu.
-
-https://preview.redd.it/jrlz7jqs7i5f1.jpg?width=640&amp;format=pjpg&amp;auto=webp&amp;s=41da3c36febf811f5e0755e1b1c13ae04a20188b
-
-Saving one of my favorites for last, Kenduraver is an OG loyalist in Kendu who has been around since the start. He took it upon himself to start the Kendu merch store around 5 million MC, and he co-founded KenduEnergy, our first true brandcoin product. This is the type of legend that works in Kendu, and he is one of the many reasons we are truly one of a kind!
-
-No one can keep up with the output in Kendu as the work towards multi-billions is never-ending. And we are growing in important ways still. One such way is that the converts highlighted in previous articles are still posting about Kendu. That is what conversion is, they are now bull posting about Kendu since they got the vision. Now imagine what happens when some of those converts use the Kendu brand to build something on chain or off chain!
-
-People who understand how markets work and what it takes for an organic project to be sustainable are shouting us out more and more and supporting Kendu with investment, both financially and with their time. These are people who understand what a movement is and are experienced traders.
-
-Volume, holder count, and shoutouts will continue to rise, and MC will continue to stair-step up (it isn’t a straight line)! This is your invite to come, take a look, and see what is going on in Kendu because: We don’t gamble. We Work!
-
-Sincerely,
-
-TheGDC33
-
-The Metrics Master
-
-ETH: 0xaa95f26e30001251fb905d264Aa7b00eE9dF6C18
-
-SOL: 2nnrviYJRLcf2bXAxpKTRXzccoDbwaP4vzuGUG75Jo45
-
-BASE: 0xef73611F98DA6E57e0776317957af61B59E09Ed7
-
-CG: [https://www.coingecko.com/en/coins/kendu-inu](https://www.coingecko.com/en/coins/kendu-inu)
-
-CMC: [https://coinmarketcap.com/currencies/kendu-inu/](https://coinmarketcap.com/currencies/kendu-inu/) <a href="javascript:void(0);" onclick="toggleText('text_1_5290872587906397370')">[less]</a></span></td><td>73</td><td>48</td><td><span data-timestamp="1749301678">Jun 7, 9:07:58 AM</span></td></tr>
-                </table>
-            </td>
-        </tr>
-        
-        
-      </table>
-    </div>
+    <div id="mainGrid" style="height: 100%"></div>
+    <script>
+        agGrid.LicenseManager.setLicenseKey("[TRIAL]_this_{AG_Charts_and_AG_Grid}_Enterprise_key_{AG-087313}_is_granted_for_evaluation_only___Use_in_production_is_not_permitted___Please_report_misuse_to_legal@ag-grid.com___For_help_with_purchasing_a_production_key_please_contact_info@ag-grid.com___You_are_granted_a_{Single_Application}_Developer_License_for_one_application_only___All_Front-End_JavaScript_developers_working_on_the_application_would_need_to_be_licensed___This_key_will_deactivate_on_{30 June 2025}____[v3]_[0102]_MTc1MTIzODAwMDAwMA==bab99475ed6430aef766ca806f8a0647");
+
+        var mainColumnDefs = [{"headerName": "Name", "field": "name", "cellRenderer": "agGroupCellRenderer"}, {"headerName": "Reason", "field": "reason", "flex": 6, "tooltipField": "reason"}, {"headerName": "Confidence", "field": "confidence"}, {"headerName": "Cumulative Score", "field": "score", "flex": 1.5, "sort": "desc"}];
+        var subColumnDefs = [{"headerName": "Title", "field": "title", "flex": 6, "tooltipField": "title", "cellRenderer": "agGroupCellRenderer"}, {"headerName": "Score", "field": "score"}, {"headerName": "Comments", "field": "num_comments"}, {"headerName": "Created", "field": "created"}];
+        var postSubColumnDefs = [{"headerName": "PostText", "field": "text", "wrapText": true, "autoHeight": true, "flex": 1}];
+        var rowData = [{"name": "DOGE", "reason": "Dogecoin is a widely known meme coin originally started as a joke and often referenced with internet dog memes.", "confidence": 1.0, "score": 496, "posts": [{"title": "Be patient people I think we will see a move once interest rates are cut. Whenever that is.", "text": "", "score": 40, "num_comments": 14, "created": "2025-06-08 14:13:10 EDT"}, {"title": "In due time", "text": "", "score": 61, "num_comments": 7, "created": "2025-06-08 01:01:27 EDT"}, {"title": "Dogecoin moving within narrow band with no choice but to decide one way or another", "text": "", "score": 47, "num_comments": 34, "created": "2025-06-07 17:14:25 EDT"}, {"title": "Logarithmic Uptrend.", "text": "https://x.com/Bitcoinsensus/status/1931380256830607730?s=19", "score": 70, "num_comments": 26, "created": "2025-06-07 15:29:07 EDT"}, {"title": "Zoom. Out.", "text": "https://x.com/TATrader_Alan/status/1931313202308292990?s=19", "score": 160, "num_comments": 22, "created": "2025-06-07 14:37:39 EDT"}, {"title": "1 month restest complete.", "text": "Now, let's cut the cheese at .19 and get above that neckline at .25", "score": 49, "num_comments": 13, "created": "2025-06-07 10:20:02 EDT"}, {"title": "How I tell my wife we bought more doge", "text": "", "score": 69, "num_comments": 8, "created": "2025-06-07 09:10:41 EDT"}]}, {"name": "KENDU", "reason": "Kendu is described as a Brandcoin with a strong community and meme-like marketing, indicating traits of a meme coin.", "confidence": 0.8, "score": 73, "posts": [{"title": "The Case for $Kendu: Info Journal #6 v2", "text": "**This is not my post: All credit to TheGDC:** [**https://x.com/TheGDC33**](https://x.com/TheGDC33)  \n  \nHere is the sixth installment of the Kendu Info Journal Series v2. KENDU is a\u00a0 Brandcoin propelled by the strongest community in DeFi. \u201cThe Kendu community is filled with talent, passion, and conviction. It is a community that is running it up old school, 2021-style. We are a sentient, autonomous, ever-expanding marketing machine that will not rest.\n\nJoin the movement! How will you use your unique set of skills and networks to build the biggest brand and legacy in #web3?\u201d (Kojak797 OG Loyalist and one of the prominent voices welcoming me to Kendu and talking in a VC in my early days)\n\nHere and now, I believe Kendu is in a spectacular position in the market. I have been putting together these articles, which are a collection of the growing engagement and conversions of various CT crypto enthusiasts, with both massive to smaller followings, as a way to showcase the success of our organic approach. Please be advised that people are noticing, and growth will continue. As we continue to move up in MC and grow, more and more people will activate, be they new members, those reactivating, or those coming back and getting a bag again.\n\nPoint #3: EXPOSURE HELPS ORGANIC projects reach **critical mass**. With a low market cap, IRL growth and Social mentions spiking exponentially, holder count going up, creators posting with us up, and output rivaling communities with much larger MCs, Kendu is building towards greatness!\n\nThis brings me to my point: $KENDU will continue to keep growing organically, where holders will keep going up as the output of the Chads and Chadettes keeps increasing. **It is time to stop flipping for pennies when you can work towards the chance for generational wealth**.\u00a0\n\nhttps://preview.redd.it/ox6981667i5f1.jpg?width=640&format=pjpg&auto=webp&s=80d7d7b6c25cdf516fa54be3b6df1013539bd2b4\n\n$Kendu is getting increasingly noticed, and this series aims to prove our conversion powers. Altsteinn has eighty-three thousand followers and has been posting about Kendu since 2024, but combing through the profile, anyone can see an exponential increase in the shoutouts featuring us. Topics range from positivity about our whales DCAing to us being the goat, to the above post recognizing our brand and cult like nature. Anyone can label themselves anything, but living your brand is what matters: actions speak louder than words.\u00a0\n\nIt can start with a simple post, but when you see the movement spreading, pay attention! I start collecting posts the second I publish the previous article. While ordering this article, I noticed something IMPORTANT:\n\nhttps://preview.redd.it/7aovcmg77i5f1.jpg?width=640&format=pjpg&auto=webp&s=204d8353723661d345d2a24c12287859979c0413\n\nhttps://preview.redd.it/bmb7eoz77i5f1.jpg?width=640&format=pjpg&auto=webp&s=d4fec57baebe78381a6f8692580542d0eb9e9155\n\nrekt\\_cooked quoted one of\u00a0 altsteinn \u2018s previous posts. Bullish\n\nThen primeblue99 quotes one of rekt\\_cooked\u2019s previous posts\n\nhttps://preview.redd.it/amxoprf97i5f1.jpg?width=640&format=pjpg&auto=webp&s=19c9566a7178e110bdf69674a4e69bf40db34a72\n\nAnd then it continues here with moriarty\\_winn quoting the previous shoutout below:\n\nhttps://preview.redd.it/vsspfdka7i5f1.jpg?width=640&format=pjpg&auto=webp&s=0319edcae0ea1929f3b66ae81574ba1a8fc51070\n\nThe content of the posts should be studied! Remember, in Kendu, there are no paid KOLs with supply. Don\u2019t panic, it is all organic!\n\nKojak797 already told readers, Kendu is running it up old school 2021 style, and it is working.\n\nhttps://preview.redd.it/i8bzqr3d7i5f1.jpg?width=640&format=pjpg&auto=webp&s=ec22905df847f6f18f1fd11aa362c6eaac9570fd\n\nTokens can\u2019t fake organic. Tokens can\u2019t fake real. Tokens can\u2019t fake having a movement. People are taking noticing and watching us like Anon\\_1000X. Kendu is as real as it comes, and we are spreading our Brandoin everywhere!\n\nSo, what do people find appealing about Kendu? Maybe it is the Ken-Du attitude:\n\nhttps://preview.redd.it/i4rp2d0e7i5f1.jpg?width=640&format=pjpg&auto=webp&s=027e7d4ca1397323662c8bef28062958d37b5860\n\nAs cryptomalli asserts in the energy that Kendu brings, all humans could use such an approach in their lives.\n\nMaybe people like us because of the drive to win. Nothing can stop what we are building, and we won\u2019t be stopped. We may not win every poll, but it is the expectation in our community that we should. With cryptonownever, Kendu showed up to Caden\u2019s poll, and we won:\n\nhttps://preview.redd.it/h8hd653f7i5f1.jpg?width=640&format=pjpg&auto=webp&s=14bdf2be6e8716dcc50b5d594a0c177d6371362c\n\nFrom that win, it resulted in a video was made about Kendu. Don\u2019t take my word for it, watch Caden yourself. His 12.8K subscribers on YouTube must be nothing.\n\n[KENDU: SLEEPING GIANT?!?!](https://www.youtube.com/watch?v=pxWrEOPbtWY)\n\nhttps://preview.redd.it/px067ieg7i5f1.jpg?width=640&format=pjpg&auto=webp&s=a12e5def8d2a5aa68b7df35685fd8c01e466ec67\n\n5iveall sent out the above post about Kendu. Only in the second post, and they already know what we are about. More posts have followed because once you get it, Kendu is part of you. Welcome and keep that helmet on!\n\nhttps://preview.redd.it/yily5tjh7i5f1.jpg?width=640&format=pjpg&auto=webp&s=d16334ac5fea567055b310e99dde819615e166d0\n\nRieki\\_sol posted about us on Memorial Day weekend when things were slower, and we still showed up in the comments and raided. As a newer convert, they are already utilizing our catalogue of memes and content. I wanted to say welcome, and we hope you come into the TG where the main magic happens (if you aren\u2019t already in it).\n\nThe next two posts track top communities by vote on their respective sites.\n\nhttps://preview.redd.it/gelwo7wi7i5f1.jpg?width=640&format=pjpg&auto=webp&s=b2b7ee0d39a5ddd1d45077a86c3248795b908662\n\n[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-qnuy3asij35f1.png?width=802&format=png&auto=webp&s=3bc18e369f0bba54229d8681fc58633c3d11967c)capitoday has 1.6K followers and a nice website where people must log in to vote. Full disclosure, I have not used this site, but some of our Chads and Chaddettes are, and it is keeping us in the top five\n\nhttps://preview.redd.it/dwxlwqak7i5f1.jpg?width=640&format=pjpg&auto=webp&s=d629edf4679a4cbb632d6540b60000fbf12fe9ff\n\nCryptoSmallcap has 11.2K followers and is labeled as a Media and News Company. They have been posting about Kendu for months now, where we regularly land in their top ten. The profile does contain some posts that get at the heart and soul of Kendu, so worth checking out.\n\nhttps://preview.redd.it/9v51zlam7i5f1.jpg?width=640&format=pjpg&auto=webp&s=df5fbb9936e66a51daeedee841b2f8af1c046022\n\nTime to get into some numbers. Gem\\_Sheriff has a price expectation of 1 billion MC, but four days later, our old friend put a \u201cBull run target\u201d of 5 billion MC. If you look at Gem\u2019s profile, you can see that Kendu posts have been happening since the summer of \u201824. According to many, that is a low target for this cycle, but I agree that billions should be the easy minimum for Kendu to reach. Only work will get us there, and only time will tell.\u00a0\n\nWhy such conviction and belief? What do some say about Kendu?\n\nhttps://preview.redd.it/oucha6hn7i5f1.jpg?width=640&format=pjpg&auto=webp&s=2489a486c2613e98f8d05235e2792c4316f9f49a\n\n[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-zob75wenj35f1.png?width=802&format=png&auto=webp&s=5127892efbfb3414d11b6f804c66d63aeff92a42)According to pepeisfriend, it is the power of the community that this personality believes has set Kendu up to be next, just like Pepe did. pepeisfriend has one hundred and twenty thousand followers, and this was the first post from this account, but it isn\u2019t the only one. I would encourage readers to check the profile themselves and decide if Kendu has fully converted another CT personality.\n\nhttps://preview.redd.it/op2ifd2p7i5f1.jpg?width=640&format=pjpg&auto=webp&s=40d49f69c9d391a88ef2d4d46706daefee3e5a8c\n\nWhile this is an older post, the chart is applicable and from my new favorite source: Guardian1771\\_. I have no idea when we will reach the next fib or when ETH will pump or BTC will make a new high or any of that, BUT I know all of the above will happen. As always, Kendu keeps working to grow the brand.\n\n[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-x636oomqj35f1.png?width=802&format=png&auto=webp&s=f22f9f6f71d026adac55da20703a31ca41a25c3f)\n\nhttps://preview.redd.it/5xu3ehfq7i5f1.jpg?width=640&format=pjpg&auto=webp&s=a9842764fb0204389de8e2cba227df60cc1dbe3b\n\nI just have to leave the above reply to my reply to cryptojourneyrs' post about ETH. He has one hundred and thirty-two thousand followers and is a well-known and respected crypto personality who is aware of Kendu.\n\nIf you are looking for more information about Kend as you research, here is a Space from a massive account Officialtravlad:\u00a0\n\nhttps://preview.redd.it/9t2h9omr7i5f1.jpg?width=640&format=pjpg&auto=webp&s=54dff13a7f62e5ee4a7ccec29f45b7aefc093ae7\n\nAt the time of writing, the post had 22.9 thousand views and 15.5 thousand listens. Additionally, Kendu is hosting a community space of our own at 5 pm EST today. (you can find it on X, 6/4/25)\n\nTune in or have a listen to learn more about Kendu.\n\nhttps://preview.redd.it/jrlz7jqs7i5f1.jpg?width=640&format=pjpg&auto=webp&s=41da3c36febf811f5e0755e1b1c13ae04a20188b\n\nSaving one of my favorites for last, Kenduraver is an OG loyalist in Kendu who has been around since the start. He took it upon himself to start the Kendu merch store around 5 million MC, and he co-founded KenduEnergy, our first true brandcoin product. This is the type of legend that works in Kendu, and he is one of the many reasons we are truly one of a kind!\n\nNo one can keep up with the output in Kendu as the work towards multi-billions is never-ending. And we are growing in important ways still. One such way is that the converts highlighted in previous articles are still posting about Kendu. That is what conversion is, they are now bull posting about Kendu since they got the vision. Now imagine what happens when some of those converts use the Kendu brand to build something on chain or off chain!\n\nPeople who understand how markets work and what it takes for an organic project to be sustainable are shouting us out more and more and supporting Kendu with investment, both financially and with their time. These are people who understand what a movement is and are experienced traders.\n\nVolume, holder count, and shoutouts will continue to rise, and MC will continue to stair-step up (it isn\u2019t a straight line)! This is your invite to come, take a look, and see what is going on in Kendu because: We don\u2019t gamble. We Work!\n\nSincerely,\n\nTheGDC33\n\nThe Metrics Master\n\nETH: 0xaa95f26e30001251fb905d264Aa7b00eE9dF6C18\n\nSOL: 2nnrviYJRLcf2bXAxpKTRXzccoDbwaP4vzuGUG75Jo45\n\nBASE: 0xef73611F98DA6E57e0776317957af61B59E09Ed7\n\nCG: [https://www.coingecko.com/en/coins/kendu-inu](https://www.coingecko.com/en/coins/kendu-inu)\n\nCMC: [https://coinmarketcap.com/currencies/kendu-inu/](https://coinmarketcap.com/currencies/kendu-inu/)", "score": 73, "num_comments": 48, "created": "2025-06-07 09:07:58 EDT"}]}];
+
+        var gridOptions = {
+            domLayout: 'autoHeight',
+            columnDefs: mainColumnDefs,
+            rowData: rowData,
+            masterDetail: true,
+            detailRowAutoHeight: true,
+            detailCellRendererParams: {
+                detailGridOptions: {
+                    columnDefs: subColumnDefs,
+                    defaultColDef: {
+                        resizable: true,
+                        sortable: true,
+                        flex: 1
+                    },
+                    masterDetail: true,
+                    detailRowAutoHeight: true,
+                    detailCellRendererParams: {
+                        detailGridOptions: {
+                            columnDefs: postSubColumnDefs,
+                            headerHeight: 0,
+                            defaultColDef: {
+                                resizable: true,
+                                sortable: true,
+                                flex: 1
+                            }
+                        },
+                        getDetailRowData: function(params) {
+                            // Each post only has one detail row: itself
+                            params.successCallback([params.data]);
+                        }
+                    }
+                },
+                getDetailRowData: function(params) {
+                    params.successCallback(params.data.posts);
+                }
+            },
+            defaultColDef: {
+                resizable: true,
+                sortable: true,
+                flex: 1
+            }
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+            var gridDiv = document.getElementById('mainGrid');
+            agGrid.createGrid(gridDiv, gridOptions);
+        });
+    </script>
 </body>
 </html>
