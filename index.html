@@ -3,10 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Meme coin Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
     <script src="libs/ag-grid-enterprise.min.js"></script>
     <style>
     .ag-center-cols-viewport {
         min-height: unset !important;
+    }
+    .centered-cell {
+        text-align: center !important;
+    }
+    body {
+        background-color: rgb(240, 250, 240); /* very light minty green */
+        color: rgb(30, 60, 30);               /* dark forest green text for overall page */
+        font-family: 'IBM Plex Sans', sans-serif; /* matching Quartz theme font */
+        margin: 0;
+        padding: 2rem;
+        min-height: 100vh;
+        /* Optional subtle texture or gradient for depth */
+        background-image: linear-gradient(
+            45deg,
+            rgba(230, 245, 230, 0.1) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(230, 245, 230, 0.1) 50%,
+            rgba(230, 245, 230, 0.1) 75%,
+            transparent 75%,
+            transparent
+        );
+    }
+    h1 {
+      font-family: 'IBM Plex Sans', sans-serif;       /* Matches Quartz theme font */
+      font-weight: 600;                               /* Semi-bold for good emphasis */
+      font-size: 2.5rem;                              /* Clear, prominent size */
+      color: rgb(30, 60, 30);                         /* Dark forest green matching grid text */
+      margin-bottom: 1rem;                            /* Space between header and grid */
+      border-bottom: 3px solid rgb(34, 139, 34);      /* Accent underline in medium sea green */
+      padding-bottom: 0.25rem;                        /* Small padding under text */
+      letter-spacing: 0.05em;                         /* Slight spacing for elegance */
+      user-select: none;                              /* Optional: prevent text selection */
+      text-align: center;                             /* Center the header */
     }
     </style>
 </head>
@@ -14,27 +49,138 @@
     <h1>Likely Meme Coins from Reddit</h1>
     <div id="mainGrid" style="height: 100%"></div>
     <script>
-        var mainColumnDefs = [{"headerName": "Name", "field": "name", "cellRenderer": "agGroupCellRenderer"}, {"headerName": "Reason", "field": "reason", "flex": 6, "tooltipField": "reason"}, {"headerName": "Confidence", "field": "confidence"}, {"headerName": "Cumulative Score", "field": "score", "flex": 1.5, "sort": "desc"}];
-        var subColumnDefs = [{"headerName": "Title", "field": "title", "flex": 6, "tooltipField": "title", "cellRenderer": "agGroupCellRenderer"}, {"headerName": "Score", "field": "score"}, {"headerName": "Comments", "field": "num_comments"}, {"headerName": "Created", "field": "created"}];
-        var postSubColumnDefs = [{"headerName": "PostText", "field": "text", "wrapText": true, "autoHeight": true, "flex": 1}];
-        var rowData = [{"name": "DOGE", "reason": "Dogecoin is a widely known meme coin originally started as a joke and often referenced with internet dog memes.", "confidence": 1.0, "score": 496, "posts": [{"title": "Be patient people I think we will see a move once interest rates are cut. Whenever that is.", "text": "", "score": 40, "num_comments": 14, "created": "2025-06-08 14:13:10 EDT"}, {"title": "In due time", "text": "", "score": 61, "num_comments": 7, "created": "2025-06-08 01:01:27 EDT"}, {"title": "Dogecoin moving within narrow band with no choice but to decide one way or another", "text": "", "score": 47, "num_comments": 34, "created": "2025-06-07 17:14:25 EDT"}, {"title": "Logarithmic Uptrend.", "text": "https://x.com/Bitcoinsensus/status/1931380256830607730?s=19", "score": 70, "num_comments": 26, "created": "2025-06-07 15:29:07 EDT"}, {"title": "Zoom. Out.", "text": "https://x.com/TATrader_Alan/status/1931313202308292990?s=19", "score": 160, "num_comments": 22, "created": "2025-06-07 14:37:39 EDT"}, {"title": "1 month restest complete.", "text": "Now, let's cut the cheese at .19 and get above that neckline at .25", "score": 49, "num_comments": 13, "created": "2025-06-07 10:20:02 EDT"}, {"title": "How I tell my wife we bought more doge", "text": "", "score": 69, "num_comments": 8, "created": "2025-06-07 09:10:41 EDT"}]}, {"name": "KENDU", "reason": "Kendu is described as a Brandcoin with a strong community and meme-like marketing, indicating traits of a meme coin.", "confidence": 0.8, "score": 73, "posts": [{"title": "The Case for $Kendu: Info Journal #6 v2", "text": "**This is not my post: All credit to TheGDC:** [**https://x.com/TheGDC33**](https://x.com/TheGDC33)  \n  \nHere is the sixth installment of the Kendu Info Journal Series v2. KENDU is a\u00a0 Brandcoin propelled by the strongest community in DeFi. \u201cThe Kendu community is filled with talent, passion, and conviction. It is a community that is running it up old school, 2021-style. We are a sentient, autonomous, ever-expanding marketing machine that will not rest.\n\nJoin the movement! How will you use your unique set of skills and networks to build the biggest brand and legacy in #web3?\u201d (Kojak797 OG Loyalist and one of the prominent voices welcoming me to Kendu and talking in a VC in my early days)\n\nHere and now, I believe Kendu is in a spectacular position in the market. I have been putting together these articles, which are a collection of the growing engagement and conversions of various CT crypto enthusiasts, with both massive to smaller followings, as a way to showcase the success of our organic approach. Please be advised that people are noticing, and growth will continue. As we continue to move up in MC and grow, more and more people will activate, be they new members, those reactivating, or those coming back and getting a bag again.\n\nPoint #3: EXPOSURE HELPS ORGANIC projects reach **critical mass**. With a low market cap, IRL growth and Social mentions spiking exponentially, holder count going up, creators posting with us up, and output rivaling communities with much larger MCs, Kendu is building towards greatness!\n\nThis brings me to my point: $KENDU will continue to keep growing organically, where holders will keep going up as the output of the Chads and Chadettes keeps increasing. **It is time to stop flipping for pennies when you can work towards the chance for generational wealth**.\u00a0\n\nhttps://preview.redd.it/ox6981667i5f1.jpg?width=640&format=pjpg&auto=webp&s=80d7d7b6c25cdf516fa54be3b6df1013539bd2b4\n\n$Kendu is getting increasingly noticed, and this series aims to prove our conversion powers. Altsteinn has eighty-three thousand followers and has been posting about Kendu since 2024, but combing through the profile, anyone can see an exponential increase in the shoutouts featuring us. Topics range from positivity about our whales DCAing to us being the goat, to the above post recognizing our brand and cult like nature. Anyone can label themselves anything, but living your brand is what matters: actions speak louder than words.\u00a0\n\nIt can start with a simple post, but when you see the movement spreading, pay attention! I start collecting posts the second I publish the previous article. While ordering this article, I noticed something IMPORTANT:\n\nhttps://preview.redd.it/7aovcmg77i5f1.jpg?width=640&format=pjpg&auto=webp&s=204d8353723661d345d2a24c12287859979c0413\n\nhttps://preview.redd.it/bmb7eoz77i5f1.jpg?width=640&format=pjpg&auto=webp&s=d4fec57baebe78381a6f8692580542d0eb9e9155\n\nrekt\\_cooked quoted one of\u00a0 altsteinn \u2018s previous posts. Bullish\n\nThen primeblue99 quotes one of rekt\\_cooked\u2019s previous posts\n\nhttps://preview.redd.it/amxoprf97i5f1.jpg?width=640&format=pjpg&auto=webp&s=19c9566a7178e110bdf69674a4e69bf40db34a72\n\nAnd then it continues here with moriarty\\_winn quoting the previous shoutout below:\n\nhttps://preview.redd.it/vsspfdka7i5f1.jpg?width=640&format=pjpg&auto=webp&s=0319edcae0ea1929f3b66ae81574ba1a8fc51070\n\nThe content of the posts should be studied! Remember, in Kendu, there are no paid KOLs with supply. Don\u2019t panic, it is all organic!\n\nKojak797 already told readers, Kendu is running it up old school 2021 style, and it is working.\n\nhttps://preview.redd.it/i8bzqr3d7i5f1.jpg?width=640&format=pjpg&auto=webp&s=ec22905df847f6f18f1fd11aa362c6eaac9570fd\n\nTokens can\u2019t fake organic. Tokens can\u2019t fake real. Tokens can\u2019t fake having a movement. People are taking noticing and watching us like Anon\\_1000X. Kendu is as real as it comes, and we are spreading our Brandoin everywhere!\n\nSo, what do people find appealing about Kendu? Maybe it is the Ken-Du attitude:\n\nhttps://preview.redd.it/i4rp2d0e7i5f1.jpg?width=640&format=pjpg&auto=webp&s=027e7d4ca1397323662c8bef28062958d37b5860\n\nAs cryptomalli asserts in the energy that Kendu brings, all humans could use such an approach in their lives.\n\nMaybe people like us because of the drive to win. Nothing can stop what we are building, and we won\u2019t be stopped. We may not win every poll, but it is the expectation in our community that we should. With cryptonownever, Kendu showed up to Caden\u2019s poll, and we won:\n\nhttps://preview.redd.it/h8hd653f7i5f1.jpg?width=640&format=pjpg&auto=webp&s=14bdf2be6e8716dcc50b5d594a0c177d6371362c\n\nFrom that win, it resulted in a video was made about Kendu. Don\u2019t take my word for it, watch Caden yourself. His 12.8K subscribers on YouTube must be nothing.\n\n[KENDU: SLEEPING GIANT?!?!](https://www.youtube.com/watch?v=pxWrEOPbtWY)\n\nhttps://preview.redd.it/px067ieg7i5f1.jpg?width=640&format=pjpg&auto=webp&s=a12e5def8d2a5aa68b7df35685fd8c01e466ec67\n\n5iveall sent out the above post about Kendu. Only in the second post, and they already know what we are about. More posts have followed because once you get it, Kendu is part of you. Welcome and keep that helmet on!\n\nhttps://preview.redd.it/yily5tjh7i5f1.jpg?width=640&format=pjpg&auto=webp&s=d16334ac5fea567055b310e99dde819615e166d0\n\nRieki\\_sol posted about us on Memorial Day weekend when things were slower, and we still showed up in the comments and raided. As a newer convert, they are already utilizing our catalogue of memes and content. I wanted to say welcome, and we hope you come into the TG where the main magic happens (if you aren\u2019t already in it).\n\nThe next two posts track top communities by vote on their respective sites.\n\nhttps://preview.redd.it/gelwo7wi7i5f1.jpg?width=640&format=pjpg&auto=webp&s=b2b7ee0d39a5ddd1d45077a86c3248795b908662\n\n[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-qnuy3asij35f1.png?width=802&format=png&auto=webp&s=3bc18e369f0bba54229d8681fc58633c3d11967c)capitoday has 1.6K followers and a nice website where people must log in to vote. Full disclosure, I have not used this site, but some of our Chads and Chaddettes are, and it is keeping us in the top five\n\nhttps://preview.redd.it/dwxlwqak7i5f1.jpg?width=640&format=pjpg&auto=webp&s=d629edf4679a4cbb632d6540b60000fbf12fe9ff\n\nCryptoSmallcap has 11.2K followers and is labeled as a Media and News Company. They have been posting about Kendu for months now, where we regularly land in their top ten. The profile does contain some posts that get at the heart and soul of Kendu, so worth checking out.\n\nhttps://preview.redd.it/9v51zlam7i5f1.jpg?width=640&format=pjpg&auto=webp&s=df5fbb9936e66a51daeedee841b2f8af1c046022\n\nTime to get into some numbers. Gem\\_Sheriff has a price expectation of 1 billion MC, but four days later, our old friend put a \u201cBull run target\u201d of 5 billion MC. If you look at Gem\u2019s profile, you can see that Kendu posts have been happening since the summer of \u201824. According to many, that is a low target for this cycle, but I agree that billions should be the easy minimum for Kendu to reach. Only work will get us there, and only time will tell.\u00a0\n\nWhy such conviction and belief? What do some say about Kendu?\n\nhttps://preview.redd.it/oucha6hn7i5f1.jpg?width=640&format=pjpg&auto=webp&s=2489a486c2613e98f8d05235e2792c4316f9f49a\n\n[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-zob75wenj35f1.png?width=802&format=png&auto=webp&s=5127892efbfb3414d11b6f804c66d63aeff92a42)According to pepeisfriend, it is the power of the community that this personality believes has set Kendu up to be next, just like Pepe did. pepeisfriend has one hundred and twenty thousand followers, and this was the first post from this account, but it isn\u2019t the only one. I would encourage readers to check the profile themselves and decide if Kendu has fully converted another CT personality.\n\nhttps://preview.redd.it/op2ifd2p7i5f1.jpg?width=640&format=pjpg&auto=webp&s=40d49f69c9d391a88ef2d4d46706daefee3e5a8c\n\nWhile this is an older post, the chart is applicable and from my new favorite source: Guardian1771\\_. I have no idea when we will reach the next fib or when ETH will pump or BTC will make a new high or any of that, BUT I know all of the above will happen. As always, Kendu keeps working to grow the brand.\n\n[](https://preview.redd.it/the-case-for-kendu-info-journal-v2-v0-x636oomqj35f1.png?width=802&format=png&auto=webp&s=f22f9f6f71d026adac55da20703a31ca41a25c3f)\n\nhttps://preview.redd.it/5xu3ehfq7i5f1.jpg?width=640&format=pjpg&auto=webp&s=a9842764fb0204389de8e2cba227df60cc1dbe3b\n\nI just have to leave the above reply to my reply to cryptojourneyrs' post about ETH. He has one hundred and thirty-two thousand followers and is a well-known and respected crypto personality who is aware of Kendu.\n\nIf you are looking for more information about Kend as you research, here is a Space from a massive account Officialtravlad:\u00a0\n\nhttps://preview.redd.it/9t2h9omr7i5f1.jpg?width=640&format=pjpg&auto=webp&s=54dff13a7f62e5ee4a7ccec29f45b7aefc093ae7\n\nAt the time of writing, the post had 22.9 thousand views and 15.5 thousand listens. Additionally, Kendu is hosting a community space of our own at 5 pm EST today. (you can find it on X, 6/4/25)\n\nTune in or have a listen to learn more about Kendu.\n\nhttps://preview.redd.it/jrlz7jqs7i5f1.jpg?width=640&format=pjpg&auto=webp&s=41da3c36febf811f5e0755e1b1c13ae04a20188b\n\nSaving one of my favorites for last, Kenduraver is an OG loyalist in Kendu who has been around since the start. He took it upon himself to start the Kendu merch store around 5 million MC, and he co-founded KenduEnergy, our first true brandcoin product. This is the type of legend that works in Kendu, and he is one of the many reasons we are truly one of a kind!\n\nNo one can keep up with the output in Kendu as the work towards multi-billions is never-ending. And we are growing in important ways still. One such way is that the converts highlighted in previous articles are still posting about Kendu. That is what conversion is, they are now bull posting about Kendu since they got the vision. Now imagine what happens when some of those converts use the Kendu brand to build something on chain or off chain!\n\nPeople who understand how markets work and what it takes for an organic project to be sustainable are shouting us out more and more and supporting Kendu with investment, both financially and with their time. These are people who understand what a movement is and are experienced traders.\n\nVolume, holder count, and shoutouts will continue to rise, and MC will continue to stair-step up (it isn\u2019t a straight line)! This is your invite to come, take a look, and see what is going on in Kendu because: We don\u2019t gamble. We Work!\n\nSincerely,\n\nTheGDC33\n\nThe Metrics Master\n\nETH: 0xaa95f26e30001251fb905d264Aa7b00eE9dF6C18\n\nSOL: 2nnrviYJRLcf2bXAxpKTRXzccoDbwaP4vzuGUG75Jo45\n\nBASE: 0xef73611F98DA6E57e0776317957af61B59E09Ed7\n\nCG: [https://www.coingecko.com/en/coins/kendu-inu](https://www.coingecko.com/en/coins/kendu-inu)\n\nCMC: [https://coinmarketcap.com/currencies/kendu-inu/](https://coinmarketcap.com/currencies/kendu-inu/)", "score": 73, "num_comments": 48, "created": "2025-06-07 09:07:58 EDT"}]}];
+        var mainColumnDefs = [
+            {
+                headerName: 'Name',
+                field: 'name',
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: {suppressDoubleClickExpand: true},
+                tooltipField: 'name',
+                headerTooltip: 'Name'
+            },
+            {
+                headerName: 'Reason',
+                field: 'reason', flex: 6,
+                tooltipField: 'reason',
+                headerTooltip: 'Reason'
+            },
+            {
+                headerName: 'Confidence',
+                field: 'confidence',
+                flex: 1,
+                tooltipField: 'confidence',
+                headerTooltip: 'Confidence',
+                cellClass: 'centered-cell'
+            },
+            {
+                headerName: 'Cumulative Score',
+                field: 'score',
+                flex: 1,
+                sort: 'desc',
+                tooltipField: 'score',
+                headerTooltip: 'Cumulative Score',
+                cellClass: 'centered-cell'
+            }
+        ];
+        var subColumnDefs = [
+            //{headerName: 'Title', field: 'title', flex: 6, tooltipField: 'title', cellRenderer: 'agGroupCellRenderer'},
+            {
+                headerName: 'Title',
+                field: 'title',
+                flex: 6,
+                tooltipField: 'title',
+                headerTooltip: 'Title',
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: {
+                    innerRenderer: function(params) {
+                        return `<a href="https://reddit.com${params.data.permalink}" target="_blank">${params.value}</a>`;
+                    },
+                    suppressDoubleClickExpand: true
+                }
+            },
+            {
+                headerName: 'Score',
+                field: 'score',
+                tooltipField: 'score',
+                headerTooltip: 'Score',
+                cellClass: 'centered-cell'
+            },
+            {
+                headerName: 'Comments',
+                field: 'num_comments',
+                tooltipField: 'num_comments',
+                headerTooltip: 'Comments',
+                cellClass: 'centered-cell'
+            },
+            {
+                headerName: 'Created',
+                field: 'created',
+                valueFormatter: function(params) { return moment.unix(params.value).format('MMM D, HH:mm'); },
+                tooltipValueGetter: function(params) { return moment.unix(params.value).format('MMM D, HH:mm'); },
+                headerTooltip: 'Created'
+            }
+        ];
+        var postSubColumnDefs = [
+            {headerName: 'PostText', field: 'text', wrapText: true, autoHeight: true, flex: 1}
+        ];
+        var rowData = [{"name": "DOGE", "reason": "Dogecoin is a widely known meme coin originally started as a joke and often referenced with internet dog memes.", "confidence": 1.0, "score": 782, "posts": [{"title": "There is no top", "text": "", "score": 48, "num_comments": 7, "created": 1750290338.0, "permalink": "/r/dogecoin/comments/1lew9vz/there_is_no_top/"}, {"title": "I joined the 50k club!", "text": "Had an avg of .39 to start. Been averaging down since.", "score": 153, "num_comments": 28, "created": 1750226804.0, "permalink": "/r/dogecoin/comments/1le9qjw/i_joined_the_50k_club/"}, {"title": "Well some good news happened today for the market overall.", "text": "The Senate just gave stablecoins the green light\u201468\u201330 in favor of the GENIUS Act. From now on, issuers will need real dollar reserves, regular audits, and federal oversight to mint coins, which means no more sketchy \u201cfractional\u201d setups. That clarity is exactly what big banks and institutions have been waiting for\u2014expect a flood of new capital into DeFi and crypto apps once these rules land. With clear regulations, U.S. stablecoins can take off globally, bringing more liquidity, better yield opportunities, and a stronger dollar on-chain. Next up is the House\u2014if they sign off and the President approves it, we\u2019ll finally have the legal certainty to push crypto into the mainstream.", "score": 210, "num_comments": 37, "created": 1750198095.0, "permalink": "/r/dogecoin/comments/1le0eky/well_some_good_news_happened_today_for_the_market/"}, {"title": "My fellow shibes, please may I have you ear for a moment.", "text": "Hey everyone, I\u2019ve seen a lot of well-meaning advice floating around, but I think we need to keep a few important things in mind:\n\n1. **Early enthusiasm isn\u2019t the same as a true alt-season.** Since DOGE\u2019s big 2021 run, most rallies have been premature bursts of excitement\u2014and that\u2019s actually a **good** sign of pent-up demand and confidence in the project.\n2. **When real alt-season arrives** (yes, I know some of you doubt it, and that\u2019s fine), **DOGE is poised for a monster move.**\n   * It\u2019s a top-10, proof-of-work, Layer-1 crypto.\n   * It boasts unique use cases and genuine decentralization \u201cby the people\u201d \u2014 not driven by a single VC or corporate entity.\n3. **Catalysts are coming** that will flood money into higher-risk assets, and alts typically benefit the most. Right now, DOGE (and most alts) are in \u201csurvival mode,\u201d while Bitcoin\u2019s cycle looks stretched into what many call a \u201csuper-cycle\u201d thanks to institutional adoption.\n4. **Let\u2019s keep the community spirit strong.**\n   * If you bought high and feel frustrated, that\u2019s totally understandable \u2014 but let\u2019s not take it out on each other.\n   * This subreddit has always thrived on constructive discussion and mutual support.", "score": 69, "num_comments": 27, "created": 1750196468.0, "permalink": "/r/dogecoin/comments/1ldzr2x/my_fellow_shibes_please_may_i_have_you_ear_for_a/"}, {"title": "This is fine \u2615\ufe0f", "text": "", "score": 239, "num_comments": 26, "created": 1750174407.0, "permalink": "/r/dogecoin/comments/1ldq9by/this_is_fine/"}, {"title": "Dogecoin prepares for the next surge.", "text": "[https://x.com/TATrader\\_Alan/status/1934173297278906490](https://x.com/TATrader_Alan/status/1934173297278906490)", "score": 63, "num_comments": 25, "created": 1750150777.0, "permalink": "/r/dogecoin/comments/1ldi9ah/dogecoin_prepares_for_the_next_surge/"}]}, {"name": "KENDU INU", "reason": "Kendu Inu is mentioned in the context of social media campaigns and viral efforts, typical of meme coins.", "confidence": 0.9, "score": 75, "posts": [{"title": "Kendu: Zepathon Challenge", "text": "Akabe, a massive Kendu chad, who released the 3d printable Kendu mask, has begun a Led Zeppelin challenge, where he will be playing the drums of every Led Zeppelin song. Personally my favourite Zeppelin song is How Many More Times, reply to this post with yours!\n\n**Kendu Creator**\n\nKendu Creator is a 3d printable mask, that can be worn when creating Kendu social media videos, like dancing or singing, to help Kendu go viral and gain social media interest. This mask can be 3d printed in both the half mask and full mask forms. You can find more about this here: [https://kenducreator.com/](https://kenducreator.com/)\n\n  \nBelow is a video from the Zepathon challenge but you can find the rest of the videos here: [https://x.com/ken\\_akabe](https://x.com/ken_akabe)\n\nhttps://reddit.com/link/1ldpp2g/video/d4mtv9ii6i7f1/player\n\nThis is just an example of the very creative community that backs Kendu, Kendu is going right to the very top combining relentless social media efforts and an unprecedented IRL list of initiatives. \n\n**What Kendu Can Do For You**\n\nSo what are you waiting for? Get involved and if you have any skills you want to share, get posting videos and the Kendu army will provide you with more engagement than what money can buy! Help the Kendu army grow and we will also help you grow!\n\nSome proof of Kendu's social media dominance(to show the level of engagement we can provide), check any crypto subreddit and see the amount of upvotes and comments our project has compared to others and also Kendu is only the 2nd coin to every reach 50k Certik votes, the other coin to manage this was Pepe and we have a Certik community score of 93.67.\n\nWe Don\u2019t Gamble, We Work\n\n[r/KenduInu\\_Ecosystem](https://www.reddit.com/r/KenduInu_Ecosystem/)\n\nETH: 0xaa95f26e30001251fb905d264Aa7b00eE9dF6C18\n\nSOL: 2nnrviYJRLcf2bXAxpKTRXzccoDbwaP4vzuGUG75Jo45\n\nBASE: 0xef73611F98DA6E57e0776317957af61B59E09Ed7\n\nCG:\u00a0[https://www.coingecko.com/en/coins/kendu-inu](https://www.coingecko.com/en/coins/kendu-inu)  \nCMC:\u00a0[https://coinmarketcap.com/currencies/kendu-inu/](https://coinmarketcap.com/currencies/kendu-inu/)  \n", "score": 75, "num_comments": 39, "created": 1750173096.0, "permalink": "/r/altcoin/comments/1ldpp2g/kendu_zepathon_challenge/"}]}, {"name": "DOGE", "reason": "Dogecoin is a widely known meme coin originally started as a joke and often referenced with internet dog memes.", "confidence": 1.0, "score": 782, "posts": [{"title": "There is no top", "text": "", "score": 48, "num_comments": 7, "created": 1750290338.0, "permalink": "/r/dogecoin/comments/1lew9vz/there_is_no_top/"}, {"title": "I joined the 50k club!", "text": "Had an avg of .39 to start. Been averaging down since.", "score": 153, "num_comments": 28, "created": 1750226804.0, "permalink": "/r/dogecoin/comments/1le9qjw/i_joined_the_50k_club/"}, {"title": "Well some good news happened today for the market overall.", "text": "The Senate just gave stablecoins the green light\u201468\u201330 in favor of the GENIUS Act. From now on, issuers will need real dollar reserves, regular audits, and federal oversight to mint coins, which means no more sketchy \u201cfractional\u201d setups. That clarity is exactly what big banks and institutions have been waiting for\u2014expect a flood of new capital into DeFi and crypto apps once these rules land. With clear regulations, U.S. stablecoins can take off globally, bringing more liquidity, better yield opportunities, and a stronger dollar on-chain. Next up is the House\u2014if they sign off and the President approves it, we\u2019ll finally have the legal certainty to push crypto into the mainstream.", "score": 210, "num_comments": 37, "created": 1750198095.0, "permalink": "/r/dogecoin/comments/1le0eky/well_some_good_news_happened_today_for_the_market/"}, {"title": "My fellow shibes, please may I have you ear for a moment.", "text": "Hey everyone, I\u2019ve seen a lot of well-meaning advice floating around, but I think we need to keep a few important things in mind:\n\n1. **Early enthusiasm isn\u2019t the same as a true alt-season.** Since DOGE\u2019s big 2021 run, most rallies have been premature bursts of excitement\u2014and that\u2019s actually a **good** sign of pent-up demand and confidence in the project.\n2. **When real alt-season arrives** (yes, I know some of you doubt it, and that\u2019s fine), **DOGE is poised for a monster move.**\n   * It\u2019s a top-10, proof-of-work, Layer-1 crypto.\n   * It boasts unique use cases and genuine decentralization \u201cby the people\u201d \u2014 not driven by a single VC or corporate entity.\n3. **Catalysts are coming** that will flood money into higher-risk assets, and alts typically benefit the most. Right now, DOGE (and most alts) are in \u201csurvival mode,\u201d while Bitcoin\u2019s cycle looks stretched into what many call a \u201csuper-cycle\u201d thanks to institutional adoption.\n4. **Let\u2019s keep the community spirit strong.**\n   * If you bought high and feel frustrated, that\u2019s totally understandable \u2014 but let\u2019s not take it out on each other.\n   * This subreddit has always thrived on constructive discussion and mutual support.", "score": 69, "num_comments": 27, "created": 1750196468.0, "permalink": "/r/dogecoin/comments/1ldzr2x/my_fellow_shibes_please_may_i_have_you_ear_for_a/"}, {"title": "This is fine \u2615\ufe0f", "text": "", "score": 239, "num_comments": 26, "created": 1750174407.0, "permalink": "/r/dogecoin/comments/1ldq9by/this_is_fine/"}, {"title": "Dogecoin prepares for the next surge.", "text": "[https://x.com/TATrader\\_Alan/status/1934173297278906490](https://x.com/TATrader_Alan/status/1934173297278906490)", "score": 63, "num_comments": 25, "created": 1750150777.0, "permalink": "/r/dogecoin/comments/1ldi9ah/dogecoin_prepares_for_the_next_surge/"}]}, {"name": "KENDU INU", "reason": "Kendu Inu is mentioned in the context of social media campaigns and viral efforts, typical of meme coins.", "confidence": 0.9, "score": 75, "posts": [{"title": "Kendu: Zepathon Challenge", "text": "Akabe, a massive Kendu chad, who released the 3d printable Kendu mask, has begun a Led Zeppelin challenge, where he will be playing the drums of every Led Zeppelin song. Personally my favourite Zeppelin song is How Many More Times, reply to this post with yours!\n\n**Kendu Creator**\n\nKendu Creator is a 3d printable mask, that can be worn when creating Kendu social media videos, like dancing or singing, to help Kendu go viral and gain social media interest. This mask can be 3d printed in both the half mask and full mask forms. You can find more about this here: [https://kenducreator.com/](https://kenducreator.com/)\n\n  \nBelow is a video from the Zepathon challenge but you can find the rest of the videos here: [https://x.com/ken\\_akabe](https://x.com/ken_akabe)\n\nhttps://reddit.com/link/1ldpp2g/video/d4mtv9ii6i7f1/player\n\nThis is just an example of the very creative community that backs Kendu, Kendu is going right to the very top combining relentless social media efforts and an unprecedented IRL list of initiatives. \n\n**What Kendu Can Do For You**\n\nSo what are you waiting for? Get involved and if you have any skills you want to share, get posting videos and the Kendu army will provide you with more engagement than what money can buy! Help the Kendu army grow and we will also help you grow!\n\nSome proof of Kendu's social media dominance(to show the level of engagement we can provide), check any crypto subreddit and see the amount of upvotes and comments our project has compared to others and also Kendu is only the 2nd coin to every reach 50k Certik votes, the other coin to manage this was Pepe and we have a Certik community score of 93.67.\n\nWe Don\u2019t Gamble, We Work\n\n[r/KenduInu\\_Ecosystem](https://www.reddit.com/r/KenduInu_Ecosystem/)\n\nETH: 0xaa95f26e30001251fb905d264Aa7b00eE9dF6C18\n\nSOL: 2nnrviYJRLcf2bXAxpKTRXzccoDbwaP4vzuGUG75Jo45\n\nBASE: 0xef73611F98DA6E57e0776317957af61B59E09Ed7\n\nCG:\u00a0[https://www.coingecko.com/en/coins/kendu-inu](https://www.coingecko.com/en/coins/kendu-inu)  \nCMC:\u00a0[https://coinmarketcap.com/currencies/kendu-inu/](https://coinmarketcap.com/currencies/kendu-inu/)  \n", "score": 75, "num_comments": 39, "created": 1750173096.0, "permalink": "/r/altcoin/comments/1ldpp2g/kendu_zepathon_challenge/"}]}, {"name": "DOGE", "reason": "Dogecoin is a widely known meme coin originally started as a joke and often referenced with internet dog memes.", "confidence": 1.0, "score": 782, "posts": [{"title": "There is no top", "text": "", "score": 48, "num_comments": 7, "created": 1750290338.0, "permalink": "/r/dogecoin/comments/1lew9vz/there_is_no_top/"}, {"title": "I joined the 50k club!", "text": "Had an avg of .39 to start. Been averaging down since.", "score": 153, "num_comments": 28, "created": 1750226804.0, "permalink": "/r/dogecoin/comments/1le9qjw/i_joined_the_50k_club/"}, {"title": "Well some good news happened today for the market overall.", "text": "The Senate just gave stablecoins the green light\u201468\u201330 in favor of the GENIUS Act. From now on, issuers will need real dollar reserves, regular audits, and federal oversight to mint coins, which means no more sketchy \u201cfractional\u201d setups. That clarity is exactly what big banks and institutions have been waiting for\u2014expect a flood of new capital into DeFi and crypto apps once these rules land. With clear regulations, U.S. stablecoins can take off globally, bringing more liquidity, better yield opportunities, and a stronger dollar on-chain. Next up is the House\u2014if they sign off and the President approves it, we\u2019ll finally have the legal certainty to push crypto into the mainstream.", "score": 210, "num_comments": 37, "created": 1750198095.0, "permalink": "/r/dogecoin/comments/1le0eky/well_some_good_news_happened_today_for_the_market/"}, {"title": "My fellow shibes, please may I have you ear for a moment.", "text": "Hey everyone, I\u2019ve seen a lot of well-meaning advice floating around, but I think we need to keep a few important things in mind:\n\n1. **Early enthusiasm isn\u2019t the same as a true alt-season.** Since DOGE\u2019s big 2021 run, most rallies have been premature bursts of excitement\u2014and that\u2019s actually a **good** sign of pent-up demand and confidence in the project.\n2. **When real alt-season arrives** (yes, I know some of you doubt it, and that\u2019s fine), **DOGE is poised for a monster move.**\n   * It\u2019s a top-10, proof-of-work, Layer-1 crypto.\n   * It boasts unique use cases and genuine decentralization \u201cby the people\u201d \u2014 not driven by a single VC or corporate entity.\n3. **Catalysts are coming** that will flood money into higher-risk assets, and alts typically benefit the most. Right now, DOGE (and most alts) are in \u201csurvival mode,\u201d while Bitcoin\u2019s cycle looks stretched into what many call a \u201csuper-cycle\u201d thanks to institutional adoption.\n4. **Let\u2019s keep the community spirit strong.**\n   * If you bought high and feel frustrated, that\u2019s totally understandable \u2014 but let\u2019s not take it out on each other.\n   * This subreddit has always thrived on constructive discussion and mutual support.", "score": 69, "num_comments": 27, "created": 1750196468.0, "permalink": "/r/dogecoin/comments/1ldzr2x/my_fellow_shibes_please_may_i_have_you_ear_for_a/"}, {"title": "This is fine \u2615\ufe0f", "text": "", "score": 239, "num_comments": 26, "created": 1750174407.0, "permalink": "/r/dogecoin/comments/1ldq9by/this_is_fine/"}, {"title": "Dogecoin prepares for the next surge.", "text": "[https://x.com/TATrader\\_Alan/status/1934173297278906490](https://x.com/TATrader_Alan/status/1934173297278906490)", "score": 63, "num_comments": 25, "created": 1750150777.0, "permalink": "/r/dogecoin/comments/1ldi9ah/dogecoin_prepares_for_the_next_surge/"}]}, {"name": "KENDU INU", "reason": "Kendu Inu is mentioned in the context of social media campaigns and viral efforts, typical of meme coins.", "confidence": 0.9, "score": 75, "posts": [{"title": "Kendu: Zepathon Challenge", "text": "Akabe, a massive Kendu chad, who released the 3d printable Kendu mask, has begun a Led Zeppelin challenge, where he will be playing the drums of every Led Zeppelin song. Personally my favourite Zeppelin song is How Many More Times, reply to this post with yours!\n\n**Kendu Creator**\n\nKendu Creator is a 3d printable mask, that can be worn when creating Kendu social media videos, like dancing or singing, to help Kendu go viral and gain social media interest. This mask can be 3d printed in both the half mask and full mask forms. You can find more about this here: [https://kenducreator.com/](https://kenducreator.com/)\n\n  \nBelow is a video from the Zepathon challenge but you can find the rest of the videos here: [https://x.com/ken\\_akabe](https://x.com/ken_akabe)\n\nhttps://reddit.com/link/1ldpp2g/video/d4mtv9ii6i7f1/player\n\nThis is just an example of the very creative community that backs Kendu, Kendu is going right to the very top combining relentless social media efforts and an unprecedented IRL list of initiatives. \n\n**What Kendu Can Do For You**\n\nSo what are you waiting for? Get involved and if you have any skills you want to share, get posting videos and the Kendu army will provide you with more engagement than what money can buy! Help the Kendu army grow and we will also help you grow!\n\nSome proof of Kendu's social media dominance(to show the level of engagement we can provide), check any crypto subreddit and see the amount of upvotes and comments our project has compared to others and also Kendu is only the 2nd coin to every reach 50k Certik votes, the other coin to manage this was Pepe and we have a Certik community score of 93.67.\n\nWe Don\u2019t Gamble, We Work\n\n[r/KenduInu\\_Ecosystem](https://www.reddit.com/r/KenduInu_Ecosystem/)\n\nETH: 0xaa95f26e30001251fb905d264Aa7b00eE9dF6C18\n\nSOL: 2nnrviYJRLcf2bXAxpKTRXzccoDbwaP4vzuGUG75Jo45\n\nBASE: 0xef73611F98DA6E57e0776317957af61B59E09Ed7\n\nCG:\u00a0[https://www.coingecko.com/en/coins/kendu-inu](https://www.coingecko.com/en/coins/kendu-inu)  \nCMC:\u00a0[https://coinmarketcap.com/currencies/kendu-inu/](https://coinmarketcap.com/currencies/kendu-inu/)  \n", "score": 75, "num_comments": 39, "created": 1750173096.0, "permalink": "/r/altcoin/comments/1ldpp2g/kendu_zepathon_challenge/"}]}];
+
+        const myTheme = agGrid.themeQuartz
+        .withPart(agGrid.colorSchemeLightCold)  // start with a light cool color scheme as a base
+        .withParams({
+            backgroundColor: 'rgb(235, 245, 235)',           // very light mint green background
+            foregroundColor: 'rgb(30, 60, 30)',              // dark forest green text for readability
+            accentColor: 'rgb(34, 139, 34)',                  // medium sea green accent for highlights/selections
+            headerBackgroundColor: 'rgb(200, 230, 200)',     // soft pale green header background
+            headerTextColor: 'rgb(20, 50, 20)',               // darker green header text for contrast
+            borderColor: 'rgb(160, 200, 160)',                // muted greenish-gray borders
+            oddRowBackgroundColor: 'rgba(34, 139, 34, 0.05)', // subtle green tint on odd rows
+            selectedRowBackgroundColor: 'rgba(34, 139, 34, 0.2)', // stronger green highlight on selected rows
+            headerColumnResizeHandleColor: 'rgb(34, 139, 34)',  // accent color for resize handles
+            cellTextColor: 'rgb(25, 50, 25)',                  // slightly darker cell text
+        });
 
         var gridOptions = {
-            domLayout: 'autoHeight',
+            theme: myTheme,
+            //theme: agGrid.themeBalham.withPart(agGrid.colorSchemeDark),
+            tooltipShowDelay: 1000, // 1 second delay for tooltips
+            tooltipShowMode: 'whenTruncated', // Show tooltip only when text is truncated
+            domLayout: 'autoHeight', // Automatically adjust height of table based on content
+            colResizeDefault: 'shift',
             columnDefs: mainColumnDefs,
             rowData: rowData,
             masterDetail: true,
-            detailRowAutoHeight: true,
+            detailRowAutoHeight: true, // Automatically adjust height of subtable rows
+            onCellClicked: function(event) {
+                if (
+                    event.colDef &&
+                    event.colDef.field === 'name' // or your group field
+                ) {
+                    event.node.setExpanded(!event.node.expanded);
+                }
+            },
             detailCellRendererParams: {
                 detailGridOptions: {
                     columnDefs: subColumnDefs,
                     defaultColDef: {
                         resizable: true,
                         sortable: true,
-                        flex: 1
+                        suppressMovable: true,
+                        flex: 1,
+                        suppressHeaderMenuButton: true
                     },
+                    tooltipShowDelay: 1000, // 1 second delay for tooltips
+                    tooltipShowMode: 'whenTruncated', // Show tooltip only when text is truncated
                     masterDetail: true,
                     detailRowAutoHeight: true,
+                    onCellClicked: function(event) {
+                        if (
+                            event.colDef &&
+                            event.colDef.field === 'title' // or your group field
+                        ) {
+                            event.node.setExpanded(!event.node.expanded);
+                        }
+                    },
                     detailCellRendererParams: {
                         detailGridOptions: {
                             columnDefs: postSubColumnDefs,
@@ -42,7 +188,9 @@
                             defaultColDef: {
                                 resizable: true,
                                 sortable: true,
-                                flex: 1
+                                suppressMovable: true,
+                                flex: 1,
+                                suppressHeaderMenuButton: true
                             }
                         },
                         getDetailRowData: function(params) {
@@ -58,7 +206,9 @@
             defaultColDef: {
                 resizable: true,
                 sortable: true,
-                flex: 1
+                suppressMovable: true,
+                flex: 1,
+                suppressHeaderMenuButton: true
             }
         };
         document.addEventListener('DOMContentLoaded', function() {
